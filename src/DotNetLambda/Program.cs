@@ -24,10 +24,10 @@ namespace DotNetLambda
             }
             else
             {
-                var lambdaEntry = new LambdaEntryPoint();
-                var functionHandler = (Func<APIGatewayProxyRequest, ILambdaContext, Task<APIGatewayProxyResponse>>)(lambdaEntry.FunctionHandlerAsync);
-                using (var handlerWrapper = HandlerWrapper.GetHandlerWrapper(functionHandler, new JsonSerializer()))
-                using (var bootstrap = new LambdaBootstrap(handlerWrapper))
+                LambdaEntryPoint lambdaEntry = new LambdaEntryPoint();
+                Func<APIGatewayProxyRequest, ILambdaContext, Task<APIGatewayProxyResponse>> functionHandler = (Func<APIGatewayProxyRequest, ILambdaContext, Task<APIGatewayProxyResponse>>)(lambdaEntry.FunctionHandlerAsync);
+                using (HandlerWrapper handlerWrapper = HandlerWrapper.GetHandlerWrapper(functionHandler, new JsonSerializer()))
+                using (LambdaBootstrap bootstrap = new LambdaBootstrap(handlerWrapper))
                 {
                     bootstrap.RunAsync().Wait();
                 }

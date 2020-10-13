@@ -1,39 +1,49 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.AspNet.OData;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 namespace DotNetLambda.Controllers
 {
+    /// <summary>
+    /// Weather forecast controller.
+    /// </summary>
     [ApiController]
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
     {
-        private static readonly string[] Summaries = new[]
-        {
+        private static readonly string[] Summaries = {
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
         };
 
         private readonly ILogger<WeatherForecastController> _logger;
 
+        /// <summary>
+        /// Creates a new instance of the class.
+        /// </summary>
+        /// <param name="logger">The logger to be used in the class.</param>
         public WeatherForecastController(ILogger<WeatherForecastController> logger)
         {
             _logger = logger;
         }
 
-        [HttpGet]
-        public IEnumerable<WeatherForecast> Get()
+        /// <summary>
+        /// Gets a list of weather forecasts.
+        /// </summary>
+        /// <returns>The list of weather forecasts.</returns>
+        [HttpGet, EnableQuery]
+        public IQueryable<WeatherForecast> Get()
         {
-            var rng = new Random();
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
+            _logger.LogDebug("Getting a list of weather forecasts.");
+            Random rng = new Random();
+            return Enumerable.Range(1, 20).Select(index => new WeatherForecast
             {
+                Id = index,
                 Date = DateTime.Now.AddDays(index),
                 TemperatureC = rng.Next(-20, 55),
                 Summary = Summaries[rng.Next(Summaries.Length)]
-            })
-            .ToArray();
+            }).AsQueryable();
         }
     }
 }
