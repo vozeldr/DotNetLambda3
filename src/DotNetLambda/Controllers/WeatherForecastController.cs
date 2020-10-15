@@ -3,6 +3,7 @@ using System.Linq;
 using Microsoft.AspNet.OData;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Primitives;
 
 namespace DotNetLambda.Controllers
 {
@@ -13,7 +14,8 @@ namespace DotNetLambda.Controllers
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
     {
-        private static readonly string[] Summaries = {
+        private static readonly string[] Summaries =
+        {
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
         };
 
@@ -32,10 +34,17 @@ namespace DotNetLambda.Controllers
         /// Gets a list of weather forecasts.
         /// </summary>
         /// <returns>The list of weather forecasts.</returns>
-        [HttpGet, EnableQuery]
+        [HttpGet, LambdaEnableQuery]
         public IQueryable<WeatherForecast> Get()
         {
-            _logger.LogDebug("Getting a list of weather forecasts.");
+            _logger.LogInformation("Getting a list of weather forecasts.");
+            _logger.LogInformation($"Raw query string: {Request?.QueryString}");
+            if (Request != null)
+                foreach ((string key, StringValues value) in Request.Query)
+                {
+                    _logger.LogInformation($"Query param: {key}:{value}");
+                }
+
             Random rng = new Random();
             return Enumerable.Range(1, 20).Select(index => new WeatherForecast
             {

@@ -85,7 +85,7 @@ namespace DotNetLambda.Tests
 
         private class OdataGetResponse<T>
         {
-            [JsonProperty("odata.count")] public int? Count { get; set; }
+            [JsonProperty("@odata.count")] public int? Count { get; set; }
 
             public List<T> Value { get; set; }
         }

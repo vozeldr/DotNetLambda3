@@ -79,7 +79,11 @@ namespace DotNetLambda
             // app.UseSwagger(c => c.SerializeAsV2 = true);
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Example REST API v1");
+                string endpointBase =
+                    string.IsNullOrEmpty(Environment.GetEnvironmentVariable("AWS_LAMBDA_FUNCTION_NAME"))
+                        ? string.Empty
+                        : "/Prod";
+                c.SwaggerEndpoint($"{endpointBase}/swagger/v1/swagger.json", "Example REST API v1");
                 c.RoutePrefix = string.Empty;
             });
         }

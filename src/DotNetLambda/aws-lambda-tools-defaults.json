@@ -12,8 +12,8 @@
     "s3-prefix"     : "DotNetLambda/",
     "template"      : "serverless.template",
     "template-parameters" : "",
-    "msbuild-parameters"  : "--self-contained true /p:AssemblyName=bootstrap",
-    "framework"           : "netcoreapp3.0",
+    "msbuild-parameters"  : "--self-contained true /p:PublishReadyToRun=true",
+    "framework"           : "netcoreapp3.1",
     "s3-bucket"           : "",
     "stack-name"          : ""
 }
